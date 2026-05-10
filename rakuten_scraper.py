@@ -164,7 +164,7 @@ if all_products:
     from datetime import datetime, timezone, timedelta
     JST = timezone(timedelta(hours=9))
     today = datetime.now(JST).strftime('%Y%m%d')
-    file_path = os.path.join(os.environ['USERPROFILE'], 'Desktop', f'affiliate_{today}.html')
+    file_path = f"affiliate_{today}.html"
     with open(file_path, "w", encoding="utf-8-sig") as f:
         f.write(html)
     print(f"✅ HTMLを更新しました！（{len(KEYWORDS)}カテゴリ）")
