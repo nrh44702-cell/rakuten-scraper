@@ -16,7 +16,7 @@ KEYWORDS = [
     "Bluetoothスピーカー",
     "電気ケトル",
     "モバイルバッテリー",
-    "USBケーブル",
+    "USBケーブル"
 ]
 OUTPUT_FILE = "affiliate_products.csv"
 # =========================
@@ -77,8 +77,16 @@ def deploy_to_netlify(file_path):
             response = requests.post(url, headers=headers, files=files)
 
         if response.status_code == 200:
-            print("✅ サイトを更新しました！ https://shibata-affiliate.netlify.app")
-            print("🔄 ブラウザでCtrl+F5（スーパーリロード）で最新が表示されます")
+            print("✅ デプロイに成功しました")
+            deploy_id = response.json().get("id")
+            if deploy_id:
+                # ★ 自動公開の保険（キャッシュクリア＋公開確定）
+                restore_url = f"https://api.netlify.com/api/v1/sites/{SITE_ID}/deploys/{deploy_id}/restore"
+                requests.post(restore_url, headers=headers)
+                print("✅ サイトを更新しました！ https://shibata-affiliate.netlify.app")
+                print("🔄 ブラウザでCtrl+F5（スーパーリロード）で最新が表示されます")
+            else:
+                print("⚠️ デプロイIDが取得できませんでした")
         else:
             print(f"Netlifyデプロイ失敗 (ステータスコード: {response.status_code})")
             print(f"エラー詳細: {response.text}")
@@ -89,7 +97,6 @@ def deploy_to_netlify(file_path):
 print("===== アフィリエイト自動化スクリプト 開始 =====")
 all_products = []
 
-# CSVを初期化
 with open(OUTPUT_FILE, "w", newline="", encoding="utf-8-sig") as f:
     writer = csv.writer(f)
     writer.writerow(["カテゴリ", "商品名", "価格", "アフィリエイトURL"])
@@ -108,13 +115,15 @@ for kw in KEYWORDS:
     else:
         print(f"⚠️ {kw}: 商品が見つかりませんでした")
 
-# HTML生成（常に index.html として保存）
 if all_products:
     print("\n📄 HTMLを生成しています...")
     html = """<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>毎日自動更新！おすすめ商品</title>
 <style>
@@ -152,12 +161,11 @@ if all_products:
 </body>
 </html>"""
 
-    file_path = "index.html"   # ★ Linux対応：単純な相対パス
+    file_path = "index.html"
     with open(file_path, "w", encoding="utf-8-sig") as f:
         f.write(html)
     print(f"✅ HTMLを更新しました！（{len(KEYWORDS)}カテゴリ）")
     
-    # Netlifyに自動デプロイ
     deploy_to_netlify(file_path)
 else:
     print("\n⚠️ 商品が1件も取得できませんでした。")
