@@ -77,7 +77,7 @@ def deploy_to_netlify():
     url = f"https://api.netlify.com/api/v1/sites/{SITE_ID}/deploys"
     headers = {"Authorization": f"Bearer {NETLIFY_TOKEN}"}
     
-    file_path = os.path.join(os.environ['USERPROFILE'], 'Desktop', 'index.html')
+    file_path = "index.html"
     
     try:
         with open(file_path, "rb") as f:
