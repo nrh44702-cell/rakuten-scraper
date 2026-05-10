@@ -2,6 +2,7 @@ import requests
 import csv
 import os
 from datetime import datetime, timezone, timedelta
+
 # ========== 設定 ==========
 RAKUTEN_APP_ID = "d634ff2c-683e-4977-844d-858728677083"
 RAKUTEN_ACCESS_KEY = "pk_JItpWHG4EyXJ6Evay9tKEjtIoF0qTsV8eDhq2iN3ZEG"
@@ -60,34 +61,22 @@ def search_rakuten(keyword):
         products.append([name, price, url_aff])
     return products
 
-def deploy_to_netlify():
-    # ... 中略 ...
-    from datetime import datetime, timezone, timedelta
-    JST = timezone(timedelta(hours=9))
-    today = datetime.now(JST).strftime('%Y%m%d')
-    file_path = os.path.join(os.environ['USERPROFILE'], 'Desktop', f'affiliate_{today}.html')
-    # ... 後略 ...
-    NETLIFY_TOKEN = "nfp_AE6Tu65UHoaNXTEXyQ1GybvxjqCsxEv463dc"
-    # ★ サイトIDは以前確認したもの。念のためこのままに。
+def deploy_to_netlify(file_path):
+    NETLIFY_TOKEN = "nfp_B4wYo2kEwAgFfkK95NXDF1mk6jhv2eA3349c"
     SITE_ID = "8692aea2-b5cf-45e0-885d-56f2097a6f98"
     
     print("Netlifyデプロイを開始します...")
-    
-    # デプロイ用URL（正しいエンドポイント）
     url = f"https://api.netlify.com/api/v1/sites/{SITE_ID}/deploys"
     headers = {"Authorization": f"Bearer {NETLIFY_TOKEN}"}
     
-    file_path = "index.html"
-    
     try:
         with open(file_path, "rb") as f:
-            files = {"file": ("index.html", f, "text/html")}
+            files = {"file": (os.path.basename(file_path), f, "text/html")}
             response = requests.post(url, headers=headers, files=files)
-        
+
         if response.status_code == 200:
             print("✅ サイトを更新しました！ https://shibata-affiliate.netlify.app")
             print("🔄 ブラウザでCtrl+F5（スーパーリロード）で最新が表示されます")
-            print("⚠️ トークンの有効期限は7日間です。期限が切れる前に新しいトークンを発行してください。")  # ← これを追加
         else:
             print(f"Netlifyデプロイ失敗 (ステータスコード: {response.status_code})")
             print(f"エラー詳細: {response.text}")
@@ -98,7 +87,7 @@ def deploy_to_netlify():
 print("===== アフィリエイト自動化スクリプト 開始 =====")
 all_products = []
 
-# CSVを初期化（毎回新しく作る）
+# CSVを初期化
 with open(OUTPUT_FILE, "w", newline="", encoding="utf-8-sig") as f:
     writer = csv.writer(f)
     writer.writerow(["カテゴリ", "商品名", "価格", "アフィリエイトURL"])
@@ -117,7 +106,7 @@ for kw in KEYWORDS:
     else:
         print(f"⚠️ {kw}: 商品が見つかりませんでした")
 
-# HTML生成
+# HTML生成（常に index.html として保存）
 if all_products:
     print("\n📄 HTMLを生成しています...")
     html = """<!DOCTYPE html>
@@ -161,16 +150,13 @@ if all_products:
 </body>
 </html>"""
 
-    from datetime import datetime, timezone, timedelta
-    JST = timezone(timedelta(hours=9))
-    today = datetime.now(JST).strftime('%Y%m%d')
-    file_path = f"affiliate_{today}.html"
+    file_path = "index.html"   # ★ Linux対応：単純な相対パス
     with open(file_path, "w", encoding="utf-8-sig") as f:
         f.write(html)
     print(f"✅ HTMLを更新しました！（{len(KEYWORDS)}カテゴリ）")
     
-    # Netlifyへ自動アップロード
-    deploy_to_netlify()
+    # Netlifyに自動デプロイ
+    deploy_to_netlify(file_path)
 else:
     print("\n⚠️ 商品が1件も取得できませんでした。")
 
