@@ -166,7 +166,7 @@ if all_products:
         f.write(html)
     print(f"✅ HTMLを更新しました！（{len(KEYWORDS)}カテゴリ）")
     
-    deploy_to_netlify(file_path)
+    # deploy_to_netlify(file_path)
 else:
     print("\n⚠️ 商品が1件も取得できませんでした。")
 
