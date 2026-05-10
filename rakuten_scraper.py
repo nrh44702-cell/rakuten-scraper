@@ -15,6 +15,8 @@ KEYWORDS = [
     "ヨガマット",
     "Bluetoothスピーカー",
     "電気ケトル",
+    "モバイルバッテリー",
+    "USBケーブル",
 ]
 OUTPUT_FILE = "affiliate_products.csv"
 # =========================
