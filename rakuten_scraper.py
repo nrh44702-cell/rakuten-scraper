@@ -9,10 +9,13 @@ RAKUTEN_ACCESS_KEY = "pk_JItpWHG4EyXJ6Evay9tKEjtIoF0qTsV8eDhq2iN3ZEG"
 AFFILIATE_ID = "53a343b6.2b506472.53a343b7.7360f1be"
 KEYWORDS = [
     "ふるさと納税 ランキング",
-    "ふるさと納税 還元率 高い",
     "ふるさと納税 肉",
     "ふるさと納税 海鮮",
-    "ふるさと納税 米"
+    "ふるさと納税 米",
+    "ふるさと納税 フルーツ",
+    "ふるさと納税 スイーツ",
+    "ふるさと納税 ビール",
+    "ふるさと納税 家電"
 ]
 OUTPUT_FILE = "affiliate_products.csv"
 # =========================
