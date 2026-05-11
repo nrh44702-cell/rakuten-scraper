@@ -8,15 +8,10 @@ RAKUTEN_APP_ID = "d634ff2c-683e-4977-844d-858728677083"
 RAKUTEN_ACCESS_KEY = "pk_JItpWHG4EyXJ6Evay9tKEjtIoF0qTsV8eDhq2iN3ZEG"
 AFFILIATE_ID = "53a343b6.2b506472.53a343b7.7360f1be"
 KEYWORDS = [
-    "ワイヤレスイヤホン",
-    "スマートウォッチ",
-    "加湿器",
-    "コーヒーメーカー",
-    "ヨガマット",
-    "Bluetoothスピーカー",
-    "電気ケトル",
-    "モバイルバッテリー",
-    "USBケーブル"
+    "証券口座開設キャンペーン",
+    "高級美顔器",
+    "ビジネス向けSaaS",
+    "ふるさと納税 高還元率"
 ]
 OUTPUT_FILE = "affiliate_products.csv"
 # =========================
